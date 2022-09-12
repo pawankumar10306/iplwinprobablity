@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.rtl.min.css"
+        integrity="sha384-+4j30LffJ4tgIMrq9CwHvn0NjEvmuDCOfk6Rpg2xg7zgOxWWtLtozDEEVvBPgHqE" crossorigin="anonymous">
+
+    <title>IPL Win Probablity</title>
+</head>
+
+<body>
+
+    <form method="post">
+        <div class="container">
+
+            <h1 class="text-center">IPL Wining Prediction</h1>
+
+            <div class="mb-3">
+                <label class="form-label">Batting team</label>
+                <select name="batting_team" class="form-select">
+                    {% for batting_team in batting_team %}
+                    <option value="{{ batting_team }}">{{ batting_team }} </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Bowling Team</label>
+                <select name="bowling_team" class="form-select">
+                    {% for batting_team in batting_team %}
+                    <option value="{{ batting_team }}">{{ batting_team }} </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Select Host City</label>
+                <select name="city" class="form-select">
+                    {% for city in city %}
+                    <option value="{{ city }}">{{ city }} </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label">Target</label>
+                    <input name="target"type="number" class="form-control" >
+                </div>
+                <div class="col">
+                    <label class="form-label">Score</label>
+                    <input name="score"type="number" class="form-control" >
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label">Overs</label>
+                    <input name="overs"type="number" class="form-control" >
+                </div>
+                <div class="col">
+                    <label class="form-label">Wickets</label>
+                    <input name="wickets"type="number" class="form-control" >
+                </div>
+            </div>
+
+            <div class="d-grid gap-3">
+                <input type="submit" class="btn btn-primary" onclick="send_data()" value="Predict Probablity">
+            </div>
+        </div>
+
+    </form>
+    <br/>
+<div class="container">
+    <p><span id="win"></span></p>
+    <p><span id="loss"></span></p>
+</div>
+<script>
+    function form_handler(event){
+        event.preventDefault();
+    }
+    function send_data(){
+        document.querySelector('form').addEventListener('submit',form_handler);
+        var fd = new FormData(document.querySelector('form'));
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST','/predict',true);
+        document.getElementById("win").innerHTML="Wait! Predicting Probablity";
+        document.getElementById("loss").innerHTML="Wait! Predicting Probablity";
+
+        xhr.onreadystatechange=function(){
+            if(xhr.readyState==XMLHttpRequest.DONE){
+                var response = JSON.parse(xhr.responseText);
+                document.getElementById("win").innerHTML="Wining percentage is "+response.win+'%';
+                document.getElementById("loss").innerHTML="losing percentage is "+response.loss+'%';
+            }
+        }
+        xhr.onload= function(){};
+        xhr.send(fd);
+    }
+
+</script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+        crossorigin="anonymous"></script>
+
+
+</body>
+
+</html>

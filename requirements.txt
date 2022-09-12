@@ -1,0 +1,4 @@
+flask
+pandas
+gunicorn
+Scikit-learn==1.0.2
